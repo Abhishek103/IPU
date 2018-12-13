@@ -10,9 +10,26 @@ elseif(isset($_SESSION["admin"]))
   header('Location: login.php');
 }
 else{
-$user_id = $_SESSION['user_id'];
-$user = getUserById($user_id);
+  $user_id = $_SESSION['user_id'];
 }
+if(isset($_POST['orgSubmit']))
+{
+  $user_prof_summary = array(
+    'user_current_desg' => $_POST['inputDesg'],
+    'user_current_org' => $_POST['inputOrg'],
+    'user_ofc_loc' => $_POST['inputLoc'],
+    'user_ofc_no' => $_POST['inputOfcPhn'],
+    'user_ofc_email' => $_POST['inputOfcEmail'],
+    'user_skills' => $_POST['inputSkills'],
+    'user_prof_notes' => $_POST['inputProfExperience']
+  );
+  updateUsermeta($usermetaName='user_prof_summary', json_encode($user_prof_summary), $user_id);
+}
+$user = json_decode(getUserById($user_id), true);
+if(array_key_exists('user_prof_summary', $user['usermeta']))
+{
+  $user_prof_summary = json_decode($user['usermeta']['user_prof_summary'], true);
+}  
 ?>
 <html>
 <head>
@@ -193,14 +210,14 @@ $user = getUserById($user_id);
 <div class="col-md-offset-1 col-md-10">
     <div class="nav-tabs-custom">
       <ul class="nav nav-tabs">
-        <li class="active"><a href="#activity" data-toggle="tab">Activity</a></li>
-        <li><a href="#timeline" data-toggle="tab">Timeline</a></li>
-        <li><a href="#settings" data-toggle="tab">Settings</a></li>
+        <!-- <li><a href="#activity" data-toggle="tab">Activity</a></li> -->
+        <li class="active"><a href="#organisations" data-toggle="tab">Professional Information</a></li>
+        <li><a href="#settings" data-toggle="tab">Personal Informaton</a></li>
         <li><a href="#password" data-toggle="tab">Security</a></li>
       </ul>
       <div class="tab-content">
-        <div class="active tab-pane" id="activity">
-          <!-- Post -->
+        <!-- <div class="tab-pane" id="activity">
+        
           <div class="post">
             <div class="user-block">
               <img class="img-circle img-bordered-sm" src="assets/img/user1-128x128.jpg" alt="user image">
@@ -210,7 +227,7 @@ $user = getUserById($user_id);
                   </span>
               <span class="description">Shared publicly - 7:30 PM today</span>
             </div>
-            <!-- /.user-block -->
+           
             <p>
               Lorem ipsum represents a long-held tradition for designers,
               typographers and the like. Some people hate it and argue for
@@ -229,9 +246,7 @@ $user = getUserById($user_id);
 
             <input class="form-control input-sm" type="text" placeholder="Type a comment">
           </div>
-          <!-- /.post -->
-
-          <!-- Post -->
+          
           <div class="post clearfix">
             <div class="user-block">
               <img class="img-circle img-bordered-sm" src="assets/img/user7-128x128.jpg" alt="User Image">
@@ -241,7 +256,7 @@ $user = getUserById($user_id);
                   </span>
               <span class="description">Sent you a message - 3 days ago</span>
             </div>
-            <!-- /.user-block -->
+       
             <p>
               Lorem ipsum represents a long-held tradition for designers,
               typographers and the like. Some people hate it and argue for
@@ -261,9 +276,9 @@ $user = getUserById($user_id);
               </div>
             </form>
           </div>
-          <!-- /.post -->
+         
 
-          <!-- Post -->
+       
           <div class="post">
             <div class="user-block">
               <img class="img-circle img-bordered-sm" src="assets/img/user6-128x128.jpg" alt="User Image">
@@ -273,12 +288,12 @@ $user = getUserById($user_id);
                   </span>
               <span class="description">Posted 5 photos - 5 days ago</span>
             </div>
-            <!-- /.user-block -->
+        
             <div class="row margin-bottom">
               <div class="col-sm-6">
                 <img class="img-responsive" src="assets/img/photo1.png" alt="Photo">
               </div>
-              <!-- /.col -->
+      
               <div class="col-sm-6">
                 <div class="row">
                   <div class="col-sm-6">
@@ -286,19 +301,18 @@ $user = getUserById($user_id);
                     <br>
                     <img class="img-responsive" src="assets/img/photo3.jpg" alt="Photo">
                   </div>
-                  <!-- /.col -->
                   <div class="col-sm-6">
                     <img class="img-responsive" src="assets/img/photo4.jpg" alt="Photo">
                     <br>
                     <img class="img-responsive" src="assets/img/photo1.png" alt="Photo">
                   </div>
-                  <!-- /.col -->
+                  
                 </div>
-                <!-- /.row -->
+                
               </div>
-              <!-- /.col -->
+              
             </div>
-            <!-- /.row -->
+            
 
             <ul class="list-inline">
               <li><a href="#" class="link-black text-sm"><i class="fa fa-share margin-r-5"></i> Share</a></li>
@@ -311,140 +325,99 @@ $user = getUserById($user_id);
 
             <input class="form-control input-sm" type="text" placeholder="Type a comment">
           </div>
-          <!-- /.post -->
-        </div>
+        
+        </div> -->
         <!-- /.tab-pane -->
-        <div class="tab-pane" id="timeline">
-          <!-- The timeline -->
-          <ul class="timeline timeline-inverse">
-            <!-- timeline time label -->
-            <li class="time-label">
-                  <span class="bg-red">
-                    10 Feb. 2014
-                  </span>
-            </li>
-            <!-- /.timeline-label -->
-            <!-- timeline item -->
-            <li>
-              <i class="fa fa-envelope bg-blue"></i>
-
-              <div class="timeline-item">
-                <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
-
-                <h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>
-
-                <div class="timeline-body">
-                  Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
-                  weebly ning heekya handango imeem plugg dopplr jibjab, movity
-                  jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
-                  quora plaxo ideeli hulu weebly balihoo...
-                </div>
-                <div class="timeline-footer">
-                  <a class="btn btn-primary btn-xs">Read more</a>
-                  <a class="btn btn-danger btn-xs">Delete</a>
-                </div>
+        <div class="active tab-pane" id="organisations">
+        <form class="form-horizontal" action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="POST">
+            <div class="form-group">
+              <label for="inputOrg" class="col-sm-2 control-label"> Organisation</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="inputOrg" name="inputOrg" placeholder="Current Organisation" value="<?php  if(array_key_exists('user_prof_summary', $user['usermeta'])) echo $user_prof_summary['user_current_org']; ?>">
               </div>
-            </li>
-            <!-- END timeline item -->
-            <!-- timeline item -->
-            <li>
-              <i class="fa fa-user bg-aqua"></i>
-
-              <div class="timeline-item">
-                <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span>
-
-                <h3 class="timeline-header no-border"><a href="#">Sarah Young</a> accepted your friend request
-                </h3>
+            </div>
+            <div class="form-group">
+              <label for="inputOrg" class="col-sm-2 control-label"> Current Designation</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="inputOrg" name="inputDesg" placeholder="Current Designation" value="<?php  if(array_key_exists('user_prof_summary', $user['usermeta'])) echo $user_prof_summary['user_current_desg']; ?>">
               </div>
-            </li>
-            <!-- END timeline item -->
-            <!-- timeline item -->
-            <li>
-              <i class="fa fa-comments bg-yellow"></i>
-
-              <div class="timeline-item">
-                <span class="time"><i class="fa fa-clock-o"></i> 27 mins ago</span>
-
-                <h3 class="timeline-header"><a href="#">Jay White</a> commented on your post</h3>
-
-                <div class="timeline-body">
-                  Take me to your leader!
-                  Switzerland is small and neutral!
-                  We are more like Germany, ambitious and misunderstood!
-                </div>
-                <div class="timeline-footer">
-                  <a class="btn btn-warning btn-flat btn-xs">View comment</a>
-                </div>
+            </div>
+            <div class="form-group">
+              <label for="inputOfcPhn" class="col-sm-2 control-label">Office Number</label>
+              <div class="col-sm-10">
+                <input type="number" class="form-control" id="inputOfcPhn" name="inputOfcPhn" placeholder="Office Phone Number" value="<?php  if(array_key_exists('user_prof_summary', $user['usermeta'])) echo $user_prof_summary['user_ofc_no']; ?>">
               </div>
-            </li>
-            <!-- END timeline item -->
-            <!-- timeline time label -->
-            <li class="time-label">
-                  <span class="bg-green">
-                    3 Jan. 2014
-                  </span>
-            </li>
-            <!-- /.timeline-label -->
-            <!-- timeline item -->
-            <li>
-              <i class="fa fa-camera bg-purple"></i>
-
-              <div class="timeline-item">
-                <span class="time"><i class="fa fa-clock-o"></i> 2 days ago</span>
-
-                <h3 class="timeline-header"><a href="#">Mina Lee</a> uploaded new photos</h3>
-
-                <div class="timeline-body">
-                  <img src="http://placehold.it/150x100" alt="..." class="margin">
-                  <img src="http://placehold.it/150x100" alt="..." class="margin">
-                  <img src="http://placehold.it/150x100" alt="..." class="margin">
-                  <img src="http://placehold.it/150x100" alt="..." class="margin">
-                </div>
+            </div>
+            <div class="form-group">
+              <label for="inputOfcEmail" class="col-sm-2 control-label">Office Email</label>
+              <div class="col-sm-10">
+                <input class="form-control" id="inputOfcEmail" name="inputOfcEmail" placeholder="Office Email" value="<?php  if(array_key_exists('user_prof_summary', $user['usermeta'])) echo $user_prof_summary['user_ofc_email']; ?>">
               </div>
-            </li>
-            <!-- END timeline item -->
-            <li>
-              <i class="fa fa-clock-o bg-gray"></i>
-            </li>
-          </ul>
+            </div>
+            <div class="form-group">
+              <label for="inputLoc" class="col-sm-2 control-label">Location</label>
+              <div class="col-sm-10">
+                <textarea type="text" class="form-control" id="inputLoc" name="inputLoc" placeholder="Current Location"><?php  if(array_key_exists('user_prof_summary', $user['usermeta'])) echo $user_prof_summary['user_ofc_loc']; ?></textarea>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputSkills" class="col-sm-2 control-label">Skills</label>
+              <div class="col-sm-10">
+                <textarea type="text" class="form-control" id="inputSkills" name="inputSkills" placeholder="Skills"><?php  if(array_key_exists('user_prof_summary', $user['usermeta'])) echo $user_prof_summary['user_skills']; ?></textarea>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputProfExperience" class="col-sm-2 control-label">Professional Summary</label>
+              <div class="col-sm-10">
+                <textarea class="form-control" id="inputProfExperience" name="inputProfExperience" placeholder="Professional Summary" ><?php  if(array_key_exists('user_prof_summary', $user['usermeta'])) echo $user_prof_summary['user_prof_notes']; ?></textarea>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-danger" name="orgSubmit">Submit</button>
+              </div>
+            </div>
+          </form>
+          
         </div>
         <!-- /.tab-pane -->
 
         <div class="tab-pane" id="settings">
           <form class="form-horizontal">
             <div class="form-group">
-              <label for="inputName" class="col-sm-2 control-label">Name</label>
-
+              <label for="inputName"  class="col-sm-2 control-label">Name</label>
               <div class="col-sm-10">
-                <input type="email" class="form-control" id="inputName" placeholder="Name">
+                <input type="text" disabled class="form-control" value="<?php echo $user['name'];?>" id="inputName" placeholder="Name">
               </div>
             </div>
             <div class="form-group">
               <label for="inputEmail" class="col-sm-2 control-label">Email</label>
-
               <div class="col-sm-10">
-                <input type="email" class="form-control" id="inputEmail" placeholder="Email">
+                <input type="email" disabled class="form-control" value="<?php echo $user['email'];?>" id="inputEmail" placeholder="Email">
               </div>
             </div>
             <div class="form-group">
-              <label for="inputName" class="col-sm-2 control-label">Name</label>
-
+              <label for="dob" class="col-sm-2 control-label">Date Of Birth</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="inputName" placeholder="Name">
+                <input type="text" class="form-control" id="datemask" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
               </div>
             </div>
             <div class="form-group">
-              <label for="inputExperience" class="col-sm-2 control-label">Experience</label>
-
+              <label for="inputNum" class="col-sm-2 control-label">Phone Number</label>
               <div class="col-sm-10">
-                <textarea class="form-control" id="inputExperience" placeholder="Experience"></textarea>
+                <input type="Number" class="form-control" id="inputName" placeholder="Number">
               </div>
             </div>
             <div class="form-group">
-              <label for="inputSkills" class="col-sm-2 control-label">Skills</label>
-
+              <label for="homeAddress" class="col-sm-2 control-label">Home Address</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="inputSkills" placeholder="Skills">
+                <textarea class="form-control" id="homeAddress" placeholder="Home Address"></textarea>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputPerExperience" class="col-sm-2 control-label">Personal Summary</label>
+              <div class="col-sm-10">
+                <textarea class="form-control" id="inputPerExperience" placeholder="Personal Summary"></textarea>
               </div>
             </div>
             <div class="form-group">
@@ -465,23 +438,24 @@ $user = getUserById($user_id);
         </div>
         <div class="tab-pane" id="password">
           <form class="form-horizontal">
+            <div class="" id="divCheckPasswordMatch"></div>
             <div class="form-group">
               <label for="inputName" class="col-sm-2 control-label">Change password</label>
 
               <div class="col-sm-10">
-                <input type="email" class="form-control" id="inputName" placeholder="Name">
+              <input type="password" name="password" placeholder="Password"  class="form-control" required id="txtNewPassword" />
               </div>
             </div>
             <div class="form-group">
-              <label for="inputName" class="col-sm-2 control-label">Name</label>
+              <label for="inputName" class="col-sm-2 control-label">Repeat Password</label>
 
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="inputName" placeholder="Name">
+              <input type="Password" id="txtConfirmPassword" name="repeatPassword" placeholder="Repeat Password" required class="form-control"/>
               </div>
             </div>            
             <div class="form-group">
-              <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-danger">Submit</button>
+              <div class="col-sm-offset-2 col-sm-2">
+              <button type="submit" name="submit" id="submit" value="Sign Up" class="btn btn-primary btn-block" onClick="return validate();"/>Change Password</button>
               </div>
             </div>
           </form>
@@ -520,7 +494,11 @@ $user = getUserById($user_id);
 <!-- FastClick -->
 <script src="assets/thirdparty/fastclick/lib/fastclick.js"></script>
 <!-- AdminLTE App -->
-<script src="assets/js/adminlte.min.js"></script>
+<script src="assets/js/adminlte.js"></script>
+<!-- InputMask -->
+<script src="assets/plugins/input-mask/jquery.inputmask.js"></script>
+<script src="assets/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+<script src="assets/plugins/input-mask/jquery.inputmask.extensions.js"></script>
 <!-- Sparkline -->
 <script src="assets/thirdparty/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
 <!-- jvectormap  -->
@@ -534,5 +512,25 @@ $user = getUserById($user_id);
 <script src="assets/js/pages/dashboard2.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="assets/js/demo.js"></script>
+<script>
+   $(function () {
+    $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+   })
+</script>  
+<script>
+function validate() {
+    var password = $("#txtNewPassword").val();
+    var confirmPassword = $("#txtConfirmPassword").val();
+	
+	if (password != confirmPassword)
+	{
+		$("#divCheckPasswordMatch").addClass('alert alert-danger alert-dismissible text-center'); 
+		$("#divCheckPasswordMatch").html("Passwords do not match!");
+		return false;
+	}	
+    else
+        return true;
+}
+</script>
 </body>
 </html>

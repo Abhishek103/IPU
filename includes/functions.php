@@ -98,7 +98,15 @@ function getUserById($user_id)
                 'updated_at' => $row['updated_at']
             ); 
         }
-        return $user;
+        $sql_usermeta = "Select * from usermeta where user_id = $user_id";
+        if (($result_usermeta = $conn->query($sql_usermeta)) && (mysqli_num_rows($result_usermeta) > 0)) {
+            while($row_usermeta = $result_usermeta->fetch_assoc())
+            {
+                $user_usermeta[$row_usermeta['usermeta_name']]  = $row_usermeta['usermeta_value'];   
+            }
+        }   
+        $user['usermeta'] =  $user_usermeta;
+        return json_encode($user);
     }
     else
     {
@@ -159,4 +167,23 @@ function updatePassword($conf_code, $user_id, $password)
     {
         return -1;
     }
+}
+/**
+ * update usermeta
+ * @param string
+ * @param string
+ * @param integer
+ * @return integer
+ */
+function updateUsermeta($usermetaName, $user_prof_summary, $user_id)
+{
+    global $conn;
+    $sql = "DELETE FROM `usermeta` WHERE `user_id` = $user_id AND `usermeta_name` = '$usermetaName'";
+    $result = $conn->query($sql);
+
+    $stmt = $conn->prepare("INSERT INTO usermeta (user_id, usermeta_name, usermeta_value) VALUES (?, ?, ?)");
+    $stmt->bind_param("iss", $user_id, $usermetaName, $user_prof_summary);
+    $stmt->execute();
+    $stmt->close();
+    return 1;
 }

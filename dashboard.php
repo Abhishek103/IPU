@@ -11,8 +11,9 @@ elseif(isset($_SESSION["admin"]))
 }
 else{
 $user_id = $_SESSION['user_id'];
-$user = getUserById($user_id);
+
 }
+$user = json_decode(getUserById($user_id), true);
 ?>
 <html>
 <head>
@@ -199,14 +200,17 @@ $user = getUserById($user_id);
 
         <h3 class="profile-username text-center"><?php echo $user['name'];?></h3>
 
-        <p class="text-muted text-center">Software Engineer</p>
+        <p class="text-muted text-center"><?php echo $user['usermeta']['user_desg'];?></p>
 
         <ul class="list-group list-group-unbordered">
           <li class="list-group-item">
             <b>Course Type</b> <a class="pull-right"><?php if($user['course_type'] == 'mba_gen') echo "MBA (GEN)"; else echo "MBA (FM)";?></a>
           </li>
           <li class="list-group-item">
-            <b>Major</b> <a class="pull-right"><?php if($user['course_type'] == 'mba_gen') echo "MBA (GEN)"; else echo "MBA (FM)";?></a>
+            <b>Major</b> <a class="pull-right"><?php echo $user['usermeta']['user_major']; ?></a>
+          </li>
+          <li class="list-group-item">
+            <b>Minor</b> <a class="pull-right"><?php echo $user['usermeta']['user_minor']; ?></a>
           </li>
           <li class="list-group-item">
             <b>Batch</b> <a class="pull-right"><?php echo $user['batch']; ?></a>
