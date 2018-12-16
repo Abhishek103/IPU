@@ -25,17 +25,41 @@ if(isset($_POST['orgSubmit']))
   );
   updateUsermeta($usermetaName='user_prof_summary', json_encode($user_prof_summary), $user_id);
 }
+$target_dir = "assets/img/uploads/";
+$target_file = $target_dir . $user_id ."_profile_pic.jpg";
+if(isset($_POST['perSubmit']))
+{
+  
+
+  if(isset($_FILES['profilePic']) && $_FILES['profilePic']['tmp_name'] != NULL)
+  {
+    move_uploaded_file($_FILES["profilePic"]["tmp_name"], $target_file);
+  }
+
+  $user_pers_summary = array(
+    'dob' => $_POST['dob'],
+    'user_home_no' => $_POST['inputHomeNo'],
+    'user_home_loc' => $_POST['inputHomeAddress'],
+    'user_pers_notes' => $_POST['inputPerNotes'],
+    'profile_pic' => $target_file
+  );
+  updateUsermeta($usermetaName='user_pers_summary', json_encode($user_pers_summary), $user_id);
+}
 $user = json_decode(getUserById($user_id), true);
 if(array_key_exists('user_prof_summary', $user['usermeta']))
 {
   $user_prof_summary = json_decode($user['usermeta']['user_prof_summary'], true);
-}  
+}
+if(array_key_exists('user_pers_summary', $user['usermeta']))
+{
+  $user_pers_summary = json_decode($user['usermeta']['user_pers_summary'], true);
+}
 ?>
 <html>
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>AdminLTE 2 | Dashboard</title>
+  <title>USMS | Settings</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
@@ -60,8 +84,26 @@ if(array_key_exists('user_prof_summary', $user['usermeta']))
   <![endif]-->
 
   <!-- Google Font -->
+  <script type='text/javascript'>
+    function preview_image(event) 
+    {
+    var reader = new FileReader();
+    reader.onload = function()
+    {
+      var output = document.getElementById('output_image');
+      output.src = reader.result;
+    }
+    reader.readAsDataURL(event.target.files[0]);
+    }
+  </script>
   <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+  <style>
+  #output_image
+  {
+  max-width:300px;
+  }
+  </style>  
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -89,13 +131,13 @@ if(array_key_exists('user_prof_summary', $user['usermeta']))
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src="assets/img/user2-160x160.jpg" class="user-image" alt="User Image">
+              <img src="<?php  if(array_key_exists('user_pers_summary', $user['usermeta'])) echo $user_pers_summary['profile_pic']; else echo "assets/img/user2-160x160.jpg";?>" class="user-image" alt="User Image">
               <span class="hidden-xs"><?php echo $user['name'];?></span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
               <li class="user-header">
-                <img src="assets/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                <img src="<?php  if(array_key_exists('user_pers_summary', $user['usermeta'])) echo $user_pers_summary['profile_pic']; else echo "assets/img/user2-160x160.jpg";?>" class="img-circle" alt="User Image">
 
                 <p>
                   <?php echo $user['name'];?> - Web Developer
@@ -144,7 +186,7 @@ if(array_key_exists('user_prof_summary', $user['usermeta']))
       <!-- Sidebar user panel -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="assets/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+          <img src="<?php  if(array_key_exists('user_pers_summary', $user['usermeta'])) echo $user_pers_summary['profile_pic']; else echo "assets/img/user2-160x160.jpg";?>" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
           <p><?php echo $user['name'];?></p>
@@ -383,7 +425,7 @@ if(array_key_exists('user_prof_summary', $user['usermeta']))
         <!-- /.tab-pane -->
 
         <div class="tab-pane" id="settings">
-          <form class="form-horizontal">
+          <form class="form-horizontal" enctype="multipart/form-data" method="POST" action="<?php echo $_SERVER["PHP_SELF"]; ?>">
             <div class="form-group">
               <label for="inputName"  class="col-sm-2 control-label">Name</label>
               <div class="col-sm-10">
@@ -399,39 +441,39 @@ if(array_key_exists('user_prof_summary', $user['usermeta']))
             <div class="form-group">
               <label for="dob" class="col-sm-2 control-label">Date Of Birth</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="datemask" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
+                <input type="text" class="form-control" id="datemask" name="dob" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask value="<?php  if(array_key_exists('user_pers_summary', $user['usermeta'])) echo $user_pers_summary['dob']; ?>">
               </div>
             </div>
             <div class="form-group">
               <label for="inputNum" class="col-sm-2 control-label">Phone Number</label>
               <div class="col-sm-10">
-                <input type="Number" class="form-control" id="inputName" placeholder="Number">
+                <input type="Number" class="form-control" id="inputName" name="inputHomeNo" placeholder="Number" value="<?php  if(array_key_exists('user_pers_summary', $user['usermeta'])) echo $user_pers_summary['user_home_no']; ?>">
               </div>
             </div>
             <div class="form-group">
               <label for="homeAddress" class="col-sm-2 control-label">Home Address</label>
               <div class="col-sm-10">
-                <textarea class="form-control" id="homeAddress" placeholder="Home Address"></textarea>
+                <textarea class="form-control" id="homeAddress" name="inputHomeAddress" placeholder="Home Address"><?php  if(array_key_exists('user_pers_summary', $user['usermeta'])) echo $user_pers_summary['user_home_loc']; ?></textarea>
               </div>
             </div>
             <div class="form-group">
               <label for="inputPerExperience" class="col-sm-2 control-label">Personal Summary</label>
               <div class="col-sm-10">
-                <textarea class="form-control" id="inputPerExperience" placeholder="Personal Summary"></textarea>
+                <textarea class="form-control" id="inputPerExperience" name="inputPerNotes" placeholder="Personal Summary"><?php  if(array_key_exists('user_pers_summary', $user['usermeta'])) echo $user_pers_summary['user_pers_notes']; ?></textarea>
               </div>
             </div>
             <div class="form-group">
-              <div class="col-sm-offset-2 col-sm-10">
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox"> I agree to the <a href="#">terms and conditions</a>
-                  </label>
+              <label for="profilePic" class="col-sm-2 control-label">Profile Picture</label>
+              <div class="col-sm-10">
+               <div id="wrapper">
+                <input type="file" accept="image/*" onchange="preview_image(event)" name="profilePic">
+                <img id="output_image"/>
                 </div>
               </div>
             </div>
             <div class="form-group">
               <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-danger">Submit</button>
+                <button type="submit" class="btn btn-danger" name="perSubmit">Submit</button>
               </div>
             </div>
           </form>

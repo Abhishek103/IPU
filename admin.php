@@ -67,13 +67,13 @@ if(!isset($_SESSION["admin"]))
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src="assets/img/user2-160x160.jpg" class="user-image" alt="User Image">
+              <img src="<?php  if(array_key_exists('user_pers_summary', $user['usermeta'])) echo $user_pers_summary['profile_pic']; else echo "assets/img/user2-160x160.jpg";?>" class="user-image" alt="User Image">
               <span class="hidden-xs">Alexander Pierce</span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
               <li class="user-header">
-                <img src="assets/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                <img src="<?php  if(array_key_exists('user_pers_summary', $user['usermeta'])) echo $user_pers_summary['profile_pic']; else echo "assets/img/user2-160x160.jpg";?>" class="img-circle" alt="User Image">
 
                 <p>
                   Alexander Pierce - Web Developer
@@ -122,7 +122,7 @@ if(!isset($_SESSION["admin"]))
       <!-- Sidebar user panel -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="assets/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+          <img src="<?php  if(array_key_exists('user_pers_summary', $user['usermeta'])) echo $user_pers_summary['profile_pic']; else echo "assets/img/user2-160x160.jpg";?>" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
           <p>Alexander Pierce</p>
@@ -459,7 +459,7 @@ if(!isset($_SESSION["admin"]))
                         <span class="direct-chat-timestamp pull-right">23 Jan 2:00 pm</span>
                       </div>
                       <!-- /.direct-chat-info -->
-                      <img class="direct-chat-img" src="assets/img/user1-128x128.jpg" alt="message user image">
+                      <img class="direct-chat-img" src=""<?php  if(array_key_exists('user_pers_summary', $user['usermeta'])) echo $user_pers_summary['profile_pic']; else echo "assets/img/user2-160x160.jpg";?> alt="message user image">
                       <!-- /.direct-chat-img -->
                       <div class="direct-chat-text">
                         Is this template really for free? That's unbelievable!
