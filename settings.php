@@ -12,6 +12,11 @@ elseif(isset($_SESSION["admin"]))
 else{
   $user_id = $_SESSION['user_id'];
 }
+if(isset($_POST['passSubmit']))
+{
+  $password = md5($_POST['password']);
+  updatePasswordSettings($user_id, $password);
+}
 if(isset($_POST['orgSubmit']))
 {
   $user_prof_summary = array(
@@ -140,32 +145,17 @@ if(array_key_exists('user_pers_summary', $user['usermeta']))
                 <img src="<?php  if(array_key_exists('user_pers_summary', $user['usermeta'])) echo $user_pers_summary['profile_pic']; else echo "assets/img/user2-160x160.jpg";?>" class="img-circle" alt="User Image">
 
                 <p>
-                  <?php echo $user['name'];?> - Web Developer
-                  <small>Member since Nov. 2012</small>
+                  <?php echo $user['name'];?> 
                 </p>
               </li>
               <!-- Menu Body -->
-              <li class="user-body">
-                <div class="row">
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Option 1</a>
-                  </div>
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Option 2</a>
-                  </div>
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Option </a>
-                  </div>
-                </div>
-                <!-- /.row -->
-              </li>
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">
-                  <a href="#" class="btn btn-default btn-flat">Profile</a>
+                  <a href="dashboard.php" class="btn btn-default btn-flat">Profile</a>
                 </div>
                 <div class="pull-right">
-                  <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                  <a href="login.php" class="btn btn-default btn-flat">Sign out</a>
                 </div>
               </li>
             </ul>
@@ -236,12 +226,12 @@ if(array_key_exists('user_pers_summary', $user['usermeta']))
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Dashboard
+        Settings
         <small></small>
       </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Dashboard</li>
+        <li class="active">Settings</li>
       </ol>
     </section>
 
@@ -479,7 +469,7 @@ if(array_key_exists('user_pers_summary', $user['usermeta']))
           </form>
         </div>
         <div class="tab-pane" id="password">
-          <form class="form-horizontal">
+          <form class="form-horizontal" method="post" action="<?php echo $_SERVER["PHP_SELF"]; ?>">
             <div class="" id="divCheckPasswordMatch"></div>
             <div class="form-group">
               <label for="inputName" class="col-sm-2 control-label">Change password</label>
@@ -497,7 +487,7 @@ if(array_key_exists('user_pers_summary', $user['usermeta']))
             </div>            
             <div class="form-group">
               <div class="col-sm-offset-2 col-sm-2">
-              <button type="submit" name="submit" id="submit" value="Sign Up" class="btn btn-primary btn-block" onClick="return validate();"/>Change Password</button>
+              <button type="submit" name="passSubmit" id="submit" value="Sign Up" class="btn btn-primary btn-block" onClick="return validate();"/>Change Password</button>
               </div>
             </div>
           </form>

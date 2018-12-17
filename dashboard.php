@@ -14,12 +14,23 @@ $user_id = $_SESSION['user_id'];
 
 }
 $user = json_decode(getUserById($user_id), true);
+$skills = "";
+if(array_key_exists('user_prof_summary', $user['usermeta']))
+{
+  $user_prof_summary = json_decode($user['usermeta']['user_prof_summary'], true);
+  $skills = explode(",", $user_prof_summary['user_skills']);
+}
+if(array_key_exists('user_pers_summary', $user['usermeta']))
+{
+  $user_pers_summary = json_decode($user['usermeta']['user_pers_summary'], true);
+}
+
 ?>
 <html>
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>AdminLTE 2 | Dashboard</title>
+  <title>USMS | Dashboard</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
@@ -73,13 +84,13 @@ $user = json_decode(getUserById($user_id), true);
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src="assets/img/user2-160x160.jpg" class="user-image" alt="User Image">
+              <img src="<?php  if(array_key_exists('user_pers_summary', $user['usermeta'])) echo $user_pers_summary['profile_pic']; else echo "assets/img/user2-160x160.jpg";?>" class="user-image" alt="User Image">
               <span class="hidden-xs"><?php echo $user['name'];?></span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
               <li class="user-header">
-                <img src="assets/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                <img src="<?php  if(array_key_exists('user_pers_summary', $user['usermeta'])) echo $user_pers_summary['profile_pic']; else echo "assets/img/user2-160x160.jpg";?>" class="img-circle" alt="User Image">
 
                 <p>
                   <?php echo $user['name'];?> - Web Developer
@@ -87,7 +98,7 @@ $user = json_decode(getUserById($user_id), true);
                 </p>
               </li>
               <!-- Menu Body -->
-              <li class="user-body">
+              <!-- <li class="user-body">
                 <div class="row">
                   <div class="col-xs-4 text-center">
                     <a href="#">Option 1</a>
@@ -100,14 +111,14 @@ $user = json_decode(getUserById($user_id), true);
                   </div>
                 </div>
                 <!-- /.row -->
-              </li>
+              </li> -->
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">
-                  <a href="#" class="btn btn-default btn-flat">Profile</a>
+                  <a href="dashboard.php" class="btn btn-default btn-flat">Profile</a>
                 </div>
                 <div class="pull-right">
-                  <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                  <a href="login.php" class="btn btn-default btn-flat">Sign out</a>
                 </div>
               </li>
             </ul>
@@ -128,7 +139,7 @@ $user = json_decode(getUserById($user_id), true);
       <!-- Sidebar user panel -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="assets/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+          <img src="<?php  if(array_key_exists('user_pers_summary', $user['usermeta'])) echo $user_pers_summary['profile_pic']; else echo "assets/img/user2-160x160.jpg";?>" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
           <p><?php echo $user['name'];?></p>
@@ -196,11 +207,12 @@ $user = json_decode(getUserById($user_id), true);
     <!-- Profile Image -->
     <div class="box box-primary">
       <div class="box-body box-profile">
-        <img class="profile-user-img img-responsive img-circle" src="assets/img/user4-128x128.jpg" alt="User profile picture">
+        <img class="profile-user-img img-responsive img-circle" src="<?php  if(array_key_exists('user_pers_summary', $user['usermeta'])) echo $user_pers_summary['profile_pic']; else echo "assets/img/user2-160x160.jpg";?>" alt="User profile picture">
 
         <h3 class="profile-username text-center"><?php echo $user['name'];?></h3>
 
-        <p class="text-muted text-center"><?php echo $user['usermeta']['user_desg'];?></p>
+        <p class="text-muted text-center"><?php  if(array_key_exists('user_prof_summary', $user['usermeta'])) echo $user_prof_summary['user_current_desg']; else echo "";?></p>
+        <p class="text-muted text-center"><?php  if(array_key_exists('user_prof_summary', $user['usermeta'])) echo $user_prof_summary['user_current_org']; else echo "";?></p>
 
         <ul class="list-group list-group-unbordered">
           <li class="list-group-item">
@@ -236,40 +248,48 @@ $user = json_decode(getUserById($user_id), true);
       </div>
       <!-- /.box-header -->
       <div class="box-body">
-        <strong><i class="fa fa-book margin-r-5"></i> Education</strong>
+        <!-- <strong><i class="fa fa-book margin-r-5"></i> Education</strong>
         <p class="text-muted">
-          B.S. in Computer Science from the University of Tennessee at Knoxville
-        </p>
+        <?php  if(array_key_exists('user_prof_summary', $user['usermeta'])) echo $user_prof_summary['user_current_desg']; else echo "";?>
+        </p> 
         <hr>
+        -->
+        <strong><i class="fa fa-calendar margin-r-5"></i> Birthday </strong>
 
-        <strong><i class="fa fa-map-marker margin-r-5"></i> Current Organisation</strong>
+        <p class="text-muted"><?php  if(array_key_exists('user_pers_summary', $user['usermeta'])) echo $user_pers_summary['dob']; else echo "";?></p>
 
-        <p class="text-muted">Malibu, California</p>
+        <hr>
+        <strong><i class="fa fa-building margin-r-5"></i> Current Organisation</strong>
+
+        <p class="text-muted"><?php  if(array_key_exists('user_prof_summary', $user['usermeta'])) echo $user_prof_summary['user_current_org']; else echo "";?></p>
 
         <hr>
         <strong><i class="fa fa-map-marker margin-r-5"></i> Location</strong>
 
-        <p class="text-muted">Malibu, California</p>
+        <p class="text-muted"><?php  if(array_key_exists('user_prof_summary', $user['usermeta'])) echo $user_prof_summary['user_ofc_loc']; else echo "";?></p>
 
         <hr>
 
         <strong><i class="fa fa-pencil margin-r-5"></i> Skills</strong>
 
         <p>
-          <span class="label label-danger">UI Design</span>
-          <span class="label label-success">Coding</span>
-          <span class="label label-info">Javascript</span>
-          <span class="label label-warning">PHP</span>
-          <span class="label label-primary">Node.js</span>
-          <span class="label label-primary">Node.js</span>
-          <span class="label label-primary">Node.js</span>
+          <?php if($skills != "") {
+                foreach($skills as $skill){
+          ?>
+          <span class="label label-danger"><?php echo $skill;?></span>
+          <?php } } ?>
         </p>
 
         <hr>
 
-        <strong><i class="fa fa-file-text-o margin-r-5"></i> Notes</strong>
+        <strong><i class="fa fa-file-text-o margin-r-5"></i> Professional Summary </strong>
 
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim neque.</p>
+        <p><?php  if(array_key_exists('user_prof_summary', $user['usermeta'])) echo $user_prof_summary['user_prof_notes']; else echo "";?></p>
+        <hr>
+
+        <strong><i class="fa fa-file-text-o margin-r-5"></i> Personal Summary </strong>
+
+        <p><?php  if(array_key_exists('user_pers_summary', $user['usermeta'])) echo $user_pers_summary['user_pers_notes']; else echo "";?></p>
       </div>
       <!-- /.box-body -->
     </div>

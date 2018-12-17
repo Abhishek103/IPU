@@ -187,3 +187,26 @@ function updateUsermeta($usermetaName, $user_prof_summary, $user_id)
     $stmt->close();
     return 1;
 }
+/**
+ * update user's password via settings screen
+ * @param integer
+ * @param string
+ * @param string
+ * @return integer
+ */
+function updatePasswordSettings($user_id, $password)
+{
+    global $conn;
+    $user = array();
+    
+    $sql = "Select * from user where user_id = $user_id";
+    if (($result = $conn->query($sql)) && (mysqli_num_rows($result) > 0)) {
+        $sql_update = "Update user SET conf_code=NULL, password='".$password."' WHERE user_id=$user_id";
+        $result_update = $conn->query($sql_update);
+        return $user_id;
+    }
+    else
+    {
+        return -1;
+    }
+}
