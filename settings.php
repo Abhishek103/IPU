@@ -182,6 +182,8 @@ if(array_key_exists('user_pers_summary', $user['usermeta']))
           <p><?php echo $user['name'];?></p>
           <a><i class="fa fa-circle text-success"></i> Online</a>
         </div>
+        <br>
+        <br>
       </div>
       <!-- /.search form -->
       <!-- sidebar menu: : style can be found in sidebar.less -->
@@ -198,9 +200,10 @@ if(array_key_exists('user_pers_summary', $user['usermeta']))
             <li><a href="dashboard.php"><i class="fa fa-user-o"></i> Profile</a></li>
             <li><a href="events.php"><i class="fa fa-files-o"></i> Events</a></li>
             <li class="active"><a href="settings.php"><i class="fa fa-cogs"></i> Settings</a></li>
+            <li><a href="contactus.php"><i class="fa fa-envelope"></i> Contact us</a></li>
           </ul>
         </li>
-        <li class="treeview">
+        <!-- <li class="treeview">
           <a href="#">
             <i class="fa fa-files-o"></i>
             <span>Layout Options</span>
@@ -214,7 +217,7 @@ if(array_key_exists('user_pers_summary', $user['usermeta']))
             <li><a href="pages/layout/fixed.html"><i class="fa fa-circle-o"></i> Fixed</a></li>
             <li><a href="pages/layout/collapsed-sidebar.html"><i class="fa fa-circle-o"></i> Collapsed Sidebar</a></li>
           </ul>
-        </li>       
+        </li>        -->
          
       </ul>
     </section>
@@ -361,7 +364,7 @@ if(array_key_exists('user_pers_summary', $user['usermeta']))
         </div> -->
         <!-- /.tab-pane -->
         <div class="active tab-pane" id="organisations">
-        <form class="form-horizontal" action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="POST">
+          <form class="form-horizontal" action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="POST">
             <div class="form-group">
               <label for="inputOrg" class="col-sm-2 control-label"> Organisation</label>
               <div class="col-sm-10">

@@ -11,8 +11,16 @@ elseif(isset($_SESSION["admin"]))
 }
 else{
 $user_id = $_SESSION['user_id'];
-print_r($user_id);
-$user = getUserById($user_id);
+$user = json_decode(getUserById($user_id), true);
+if(array_key_exists('user_prof_summary', $user['usermeta']))
+{
+  $user_prof_summary = json_decode($user['usermeta']['user_prof_summary'], true);
+  $skills = explode(",", $user_prof_summary['user_skills']);
+}
+if(array_key_exists('user_pers_summary', $user['usermeta']))
+{
+  $user_pers_summary = json_decode($user['usermeta']['user_pers_summary'], true);
+}
 }
 ?>
 <html>
@@ -73,21 +81,20 @@ $user = getUserById($user_id);
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src="assets/img/user2-160x160.jpg" class="user-image" alt="User Image">
-              <span class="hidden-xs">Alexander Pierce</span>
+              <img src="<?php  if(array_key_exists('user_pers_summary', $user['usermeta'])) echo $user_pers_summary['profile_pic']; else echo "assets/img/user2-160x160.jpg";?>" class="user-image" alt="User Image">
+              <span class="hidden-xs"><?php echo $user['name'];?></span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
               <li class="user-header">
-                <img src="assets/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                <img src="<?php  if(array_key_exists('user_pers_summary', $user['usermeta'])) echo $user_pers_summary['profile_pic']; else echo "assets/img/user2-160x160.jpg";?>" class="img-circle" alt="User Image">
 
                 <p>
-                  Alexander Pierce - Web Developer
-                  <small>Member since Nov. 2012</small>
+                  <?php echo $user['name'];?>
                 </p>
               </li>
               <!-- Menu Body -->
-              <li class="user-body">
+              <!-- <li class="user-body">
                 <div class="row">
                   <div class="col-xs-4 text-center">
                     <a href="#">Option 1</a>
@@ -104,10 +111,10 @@ $user = getUserById($user_id);
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">
-                  <a href="#" class="btn btn-default btn-flat">Profile</a>
+                  <a href="dashboard.php" class="btn btn-default btn-flat">Profile</a>
                 </div>
                 <div class="pull-right">
-                  <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                  <a href="login.php" class="btn btn-default btn-flat">Sign out</a>
                 </div>
               </li>
             </ul>
@@ -128,12 +135,14 @@ $user = getUserById($user_id);
       <!-- Sidebar user panel -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="assets/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+          <img src="<?php  if(array_key_exists('user_pers_summary', $user['usermeta'])) echo $user_pers_summary['profile_pic']; else echo "assets/img/user2-160x160.jpg";?>" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
-          <p>Alexander Pierce</p>
-          <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+          <p><?php echo $user['name'];?></p>
+          <a><i class="fa fa-circle text-success"></i> Online</a>
         </div>
+        <br>
+        <br>
       </div>
       <!-- /.search form -->
       <!-- sidebar menu: : style can be found in sidebar.less -->
@@ -150,24 +159,9 @@ $user = getUserById($user_id);
             <li><a href="dashboard.php"><i class="fa fa-user-o"></i> Profile</a></li>
             <li class="active"><a href="events.php"><i class="fa fa-files-o"></i> Events</a></li>
             <li><a href="settings.php"><i class="fa fa-cogs"></i> Settings</a></li>
+            <li><a href="contactus.php"><i class="fa fa-envelope"></i> Contact us</a></li>
           </ul>
-        </li>
-        <li class="treeview">
-          <a href="#">
-            <i class="fa fa-files-o"></i>
-            <span>Layout Options</span>
-            <span class="pull-right-container">
-              <span class="label label-primary pull-right">4</span>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="pages/layout/top-nav.html"><i class="fa fa-circle-o"></i> Top Navigation</a></li>
-            <li><a href="pages/layout/boxed.html"><i class="fa fa-circle-o"></i> Boxed</a></li>
-            <li><a href="pages/layout/fixed.html"><i class="fa fa-circle-o"></i> Fixed</a></li>
-            <li><a href="pages/layout/collapsed-sidebar.html"><i class="fa fa-circle-o"></i> Collapsed Sidebar</a></li>
-          </ul>
-        </li>       
-         
+        </li>         
       </ul>
     </section>
     <!-- /.sidebar -->

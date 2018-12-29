@@ -210,3 +210,13 @@ function updatePasswordSettings($user_id, $password)
         return -1;
     }
 }
+
+/**
+ * send mail 
+ * @param string
+ * @param string
+ */
+function sendmail($email, $message)
+{
+    //placeholder
+}

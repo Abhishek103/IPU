@@ -24,13 +24,18 @@ if(array_key_exists('user_pers_summary', $user['usermeta']))
 {
   $user_pers_summary = json_decode($user['usermeta']['user_pers_summary'], true);
 }
-
+if(isset($_POST['messageSubmit']))
+{
+    $message = $_POST['message'];
+    sendmail($user['email'], $message);
+    
+}
 ?>
 <html>
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>USMS | Dashboard</title>
+  <title>USMS | Contact us</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
@@ -159,10 +164,10 @@ if(array_key_exists('user_pers_summary', $user['usermeta']))
             </span>
           </a>
           <ul class="treeview-menu">
-            <li class="active"><a href="dashboard.php"><i class="fa fa-user-o"></i> Profile</a></li>
+            <li><a href="dashboard.php"><i class="fa fa-user-o"></i> Profile</a></li>
             <li><a href="events.php"><i class="fa fa-files-o"></i> Events</a></li>
             <li><a href="settings.php"><i class="fa fa-cogs"></i> Settings</a></li>
-            <li><a href="contactus.php"><i class="fa fa-envelope"></i> Contact us</a></li>
+            <li class="active"><a href="contactus.php"><i class="fa fa-envelope"></i> Contact us</a></li>
           </ul>
         </li>  
          
@@ -176,116 +181,48 @@ if(array_key_exists('user_pers_summary', $user['usermeta']))
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Dashboard
+        Contact Us
         <small></small>
       </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Dashboard</li>
+        <li class="active">Contact Us</li>
       </ol>
     </section>
 
     <!-- Main content -->
     <section class="content">
 
-<div class="row">
-  <div class="col-md-3">
-
-    <!-- Profile Image -->
-    <div class="box box-primary">
-      <div class="box-body box-profile">
-        <img class="profile-user-img img-responsive img-circle" src="<?php  if(array_key_exists('user_pers_summary', $user['usermeta'])) echo $user_pers_summary['profile_pic']; else echo "assets/img/user2-160x160.jpg";?>" alt="User profile picture">
-
-        <h3 class="profile-username text-center"><?php echo $user['name'];?></h3>
-
-        <p class="text-muted text-center"><?php  if(array_key_exists('user_prof_summary', $user['usermeta'])) echo $user_prof_summary['user_current_desg']; else echo "";?></p>
-        <p class="text-muted text-center"><?php  if(array_key_exists('user_prof_summary', $user['usermeta'])) echo $user_prof_summary['user_current_org']; else echo "";?></p>
-
-        <ul class="list-group list-group-unbordered">
-          <li class="list-group-item">
-            <b>Course Type</b> <a class="pull-right"><?php if($user['course_type'] == 'mba_gen') echo "MBA (GEN)"; else echo "MBA (FM)";?></a>
-          </li>
-          <li class="list-group-item">
-            <b>Major</b> <a class="pull-right"><?php echo $user['usermeta']['user_major']; ?></a>
-          </li>
-          <li class="list-group-item">
-            <b>Minor</b> <a class="pull-right"><?php echo $user['usermeta']['user_minor']; ?></a>
-          </li>
-          <li class="list-group-item">
-            <b>Batch</b> <a class="pull-right"><?php echo $user['batch']; ?></a>
-          </li>
-          <li class="list-group-item">
-            <b>Email</b> <a class="pull-right"><?php echo $user['email']; ?></a>
-          </li>
-          <li class="list-group-item">
-            <b>Phone Number</b> <a class="pull-right"><?php echo $user['number']; ?></a>
-          </li>
-        </ul>
-      </div>
-      <!-- /.box-body -->
-    </div>
-    <!-- /.box -->
- 
-  </div>
-  <div class="col-md-9">
-     <!-- About Me Box -->
-     <div class="box box-primary">
+        <div class="row">
+        <div class="col-sm-12">
+    <div class="box box-solid">
       <div class="box-header with-border">
-        <h3 class="box-title">About Me</h3>
+        <!-- <h3 class="box-title">Carousel</h3> -->
       </div>
       <!-- /.box-header -->
       <div class="box-body">
-        <!-- <strong><i class="fa fa-book margin-r-5"></i> Education</strong>
-        <p class="text-muted">
-        <?php  if(array_key_exists('user_prof_summary', $user['usermeta'])) echo $user_prof_summary['user_current_desg']; else echo "";?>
-        </p> 
-        <hr>
-        -->
-        <strong><i class="fa fa-calendar margin-r-5"></i> Birthday </strong>
-
-        <p class="text-muted"><?php  if(array_key_exists('user_pers_summary', $user['usermeta'])) echo $user_pers_summary['dob']; else echo "";?></p>
-
-        <hr>
-        <strong><i class="fa fa-building margin-r-5"></i> Current Organisation</strong>
-
-        <p class="text-muted"><?php  if(array_key_exists('user_prof_summary', $user['usermeta'])) echo $user_prof_summary['user_current_org']; else echo "";?></p>
-
-        <hr>
-        <strong><i class="fa fa-map-marker margin-r-5"></i> Location</strong>
-
-        <p class="text-muted"><?php  if(array_key_exists('user_prof_summary', $user['usermeta'])) echo $user_prof_summary['user_ofc_loc']; else echo "";?></p>
-
-        <hr>
-
-        <strong><i class="fa fa-pencil margin-r-5"></i> Skills</strong>
-
-        <p>
-          <?php if($skills != "") {
-                foreach($skills as $skill){
-          ?>
-          <span class="label label-danger"><?php echo $skill;?></span>
-          <?php } } ?>
-        </p>
-
-        <hr>
-
-        <strong><i class="fa fa-file-text-o margin-r-5"></i> Professional Summary </strong>
-
-        <p><?php  if(array_key_exists('user_prof_summary', $user['usermeta'])) echo $user_prof_summary['user_prof_notes']; else echo "";?></p>
-        <hr>
-
-        <strong><i class="fa fa-file-text-o margin-r-5"></i> Personal Summary </strong>
-
-        <p><?php  if(array_key_exists('user_pers_summary', $user['usermeta'])) echo $user_pers_summary['user_pers_notes']; else echo "";?></p>
+        <div> 
+        <form class="form-horizontal" action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="POST">
+            <div class="form-group">
+              <label for="inputOrg" class="col-sm-2 control-label">Message</label>
+              <div class="col-sm-10">
+                <textarea required class="form-control" rows="20"  id="message" name="message" placeholder="Write Your Query" ></textarea>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-info" name="messageSubmit">Submit</button>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
       <!-- /.box-body -->
     </div>
     <!-- /.box -->
   </div>
-  </div>  
-<!-- /.row -->
-
-</section>
+        </div>  
+    </section>
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
