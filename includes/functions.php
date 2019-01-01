@@ -220,3 +220,21 @@ function sendmail($email, $message)
 {
     //placeholder
 }
+
+/**
+ * count users 
+ * @return integer
+ */
+function countusers()
+{
+    global $conn;
+    
+    $sql = "Select count(user_id) AS total from user";
+    if (($result = $conn->query($sql)) && (mysqli_num_rows($result) > 0)) {
+        while($row = $result->fetch_assoc())
+        {
+            return $row['total'] - 1;
+        }
+    }
+      
+}
