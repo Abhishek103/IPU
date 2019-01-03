@@ -11,6 +11,9 @@ if(!isset($_SESSION["admin"]))
 }
 $user_count = countusers();
 $year =  date("Y");
+$batch_year = $_REQUEST['batch'];
+$batch = getBatchDetails($batch_year);
+print_r($batch);
 ?>
 <html>
 <head>
@@ -39,7 +42,9 @@ $year =  date("Y");
   <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
-
+  
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css">
   <!-- Google Font -->
   <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
@@ -113,7 +118,7 @@ $year =  date("Y");
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MAIN NAVIGATION</li>
-        <li class="active treeview menu-open">
+        <li class="treeview">
           <a href="#">
             <i class="fa fa-dashboard"></i> <span>Dashboard</span>
             <span class="pull-right-container">
@@ -124,7 +129,7 @@ $year =  date("Y");
             <li><a href="admin.php" class="active"><i class="fa fa-user"></i> Admin View</a></li>
           </ul>
         </li>
-        <li class="treeview">
+        <li class="active treeview menu-open">
           <a href="#">
             <i class="fa fa-server"></i> <span>Batches</span>
             <span class="pull-right-container">
@@ -133,8 +138,8 @@ $year =  date("Y");
           </a>
           <ul class="treeview-menu">
             <?php for($year_start = 1998; $year_start<=$year; $year_start++) { $year_end = $year_start + 2;?>
-              <li><a href="batch.php?batch=<?php echo $year_start." - ".$year_end?>" ><i class="fa fa-calendar"></i>
-                <?php echo $year_start." - ".$year_end;?></a>
+              <li><a href="batch.php?batch=<?php echo $year_start."-".$year_end?>" ><i class="fa fa-calendar"></i>
+                <?php echo $year_start."-".$year_end;?></a>
               </li>
 						<?php } ?>
           </ul>
@@ -144,16 +149,12 @@ $year =  date("Y");
             <i class="fa fa-files-o"></i>
             <span>Events</span>
             <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
+                <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
             <li><a href="pages/layout/top-nav.html"><i class="fa fa-circle-o"></i> View Events</a></li>
             <li><a href="pages/layout/top-nav.html"><i class="fa fa-circle-o"></i> Set Events</a></li>
-            <!-- <li><a href="pages/layout/boxed.html"><i class="fa fa-circle-o"></i> Boxed</a></li>
-            <li><a href="pages/layout/fixed.html"><i class="fa fa-circle-o"></i> Fixed</a></li>
-            <li><a href="pages/layout/collapsed-sidebar.html"><i class="fa fa-circle-o"></i> Collapsed Sidebar</a></li> -->
           </ul>
         </li>       
          
@@ -167,12 +168,11 @@ $year =  date("Y");
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Dashboard
-        <small>Version 2.0</small>
+        Batch Information
       </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Dashboard</li>
+        <li class="active">Batch</li>
       </ol>
     </section>
 
@@ -180,23 +180,50 @@ $year =  date("Y");
     <section class="content">
       <!-- Info boxes -->
       <div class="row">
+      <div class="row">
+        <div class="col-xs-12">
+          
+          <!-- /.box -->
 
-        <!-- fix for small devices only -->
-        <div class="clearfix visible-sm-block"></div>
-        <!-- /.col -->
-        <div class="col-md-3 col-sm-6 col-xs-12">
-          <div class="info-box">
-            <span class="info-box-icon bg-yellow"><i class="ion ion-ios-people-outline"></i></span>
-
-            <div class="info-box-content">
-              <span class="info-box-text"> Members</span>
-              <span class="info-box-number"><?php echo $user_count; ?></span>
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">Batch <?php echo $_REQUEST['batch'];?></h3>
             </div>
-            <!-- /.info-box-content -->
+            <!-- /.box-header -->
+            <div class="box-body table-responsive">
+              <table id="example" class="table table-striped table-bordered" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Organisation</th>
+                    <th>Designation</th>
+                    <th>Phone (Offcial / Residence)</th>
+                    <th>Email (Offcial / Personal)</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Tiger Nixon</td>
+                    <td>System Architect</td>
+                    <td>Edinburgh</td>
+                    <td>61</td>
+                    <td>2011/04/25</td>
+                    <td align="center"><a href="alumnidetail.php?code=" class="btn btn-info">Open</a></td>
+                </tr>
+            </tbody>
+        
+        </table>
+         		  							
           </div>
-          <!-- /.info-box -->
+          <!-- /.box-body -->
+         </div>
+          <!-- /.box -->
         </div>
         <!-- /.col -->
+      </div>
+       
+    
       </div>
     </section>
     <!-- /.content -->
@@ -223,15 +250,29 @@ $year =  date("Y");
 <script src="assets/thirdparty/fastclick/lib/fastclick.js"></script>
 <!-- AdminLTE App -->
 <script src="assets/js/adminlte.min.js"></script>
-<!-- Sparkline -->
-<script src="assets/thirdparty/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
-<!-- jvectormap  -->
-<script src="assets/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
-<script src="assets/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
-<!-- SlimScroll -->
-<script src="assets/thirdparty/jquery-slimscroll/jquery.slimscroll.min.js"></script>
-<!-- ChartJS -->
-<script src="assets/thirdparty/chart.js/Chart.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#example').DataTable( {
+        dom: 'Bfrtip',
+        buttons: [
+            'pageLength', 'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        lengthMenu: [
+            [ 10, 25, 50, -1 ],
+            [ '10 rows', '25 rows', '50 rows', 'Show all' ]
+        ],
+    } );
+} );
+
+</script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="assets/js/pages/dashboard2.js"></script>
 <!-- AdminLTE for demo purposes -->

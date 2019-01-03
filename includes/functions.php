@@ -82,6 +82,7 @@ function getUserById($user_id)
 {
     global $conn;
     $user = array();
+    $user_usermeta = array();
     $sql = "Select * from user where user_id = $user_id";
     if (($result = $conn->query($sql)) && (mysqli_num_rows($result) > 0)) {
         while($row = $result->fetch_assoc())
@@ -237,4 +238,47 @@ function countusers()
         }
     }
       
+}
+
+/**
+ * get batch details
+ * @param string
+ * @return array
+ */
+function getBatchDetails($batch_year)
+{
+    global $conn;
+    $user_usermeta = array();
+    $sql = "SELECT * FROM user where batch ='$batch_year'";
+    if (($result = $conn->query($sql)) && (mysqli_num_rows($result) > 0)) {
+        while($row = $result->fetch_assoc())
+        {
+            $sql_usermeta = "Select * from usermeta where user_id = ".$row['user_id'];
+            if (($result_usermeta = $conn->query($sql_usermeta)) && (mysqli_num_rows($result_usermeta) > 0)) {
+                while($row_usermeta = $result_usermeta->fetch_assoc())
+                {
+                    $user_usermeta[$row_usermeta['usermeta_name']]  = $row_usermeta['usermeta_value'];   
+                }
+              
+            }   
+            $user[] = array(
+                'user_id' => $row['user_id'],
+                'name' => $row['name'],
+                'email' => $row['email'],
+                'number' => $row['number'],
+                'course_type' => $row['course_type'],
+                'batch' => $row['batch'],
+                'admin' => $row['admin'],
+                'created_at' => $row['created_at'],
+                'updated_at' => $row['updated_at'],
+                'user_meta' => $user_usermeta
+            ); 
+            $user_usermeta = array();
+            }
+        return json_encode($user);
+    }
+    else
+    {
+        return -1;
+    }
 }

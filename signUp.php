@@ -92,7 +92,7 @@ if(isset($_POST['submit']))
 							<select name="batch" id="batch" class="form-control">
 								<option value="">-- Select your batch --</option>
 								<?php for($year_start = 1998; $year_start<=2018; $year_start++) { $year_end = $year_start + 2;?>
-									<option value="<?php echo $year_start." - ".$year_end;?>"><?php echo $year_start." - ".$year_end;?></option>	
+									<option value="<?php echo $year_start."-".$year_end;?>"><?php echo $year_start." - ".$year_end;?></option>	
 								<?php } ?>
 							</select> 
 						</div>
