@@ -1,19 +1,16 @@
 <?php 
-require_once("includes/functions.php");
+require_once("includes/functions.php"); 
 session_start();
 if(!isset($_SESSION["user_id"]))
 {
   header('Location: login.php');
 }
-elseif(isset($_SESSION["admin"]))
+if(!isset($_SESSION["admin"]))
 {
   header('Location: login.php');
 }
-else{
-$user_id = $_SESSION['user_id'];
-
-}
-$user = json_decode(getUserById($user_id), true);
+$year =  date("Y");
+$user = json_decode(getUserById($_REQUEST['code']), true);
 $skills = "";
 if(array_key_exists('user_prof_summary', $user['usermeta']))
 {
@@ -30,7 +27,7 @@ if(array_key_exists('user_pers_summary', $user['usermeta']))
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>USMS | Dashboard</title>
+  <title>USMS | Alumni Detail</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
@@ -59,129 +56,131 @@ if(array_key_exists('user_pers_summary', $user['usermeta']))
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
-<div class="wrapper">
+    <div class="wrapper">
 
-  <header class="main-header">
+    <header class="main-header">
 
     <!-- Logo -->
     <a href="index2.html" class="logo">
-      <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b></b>USMS</span>
-      <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>USMS</b> ALUMNI</span>
+    <!-- mini logo for sidebar mini 50x50 pixels -->
+    <span class="logo-mini"><b></b>USMS</span>
+    <!-- logo for regular state and mobile devices -->
+    <span class="logo-lg"><b>USMS</b> ALUMNI</span>
     </a>
 
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">
-      <!-- Sidebar toggle button-->
-      <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+    <!-- Sidebar toggle button-->
+    <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
         <span class="sr-only">Toggle navigation</span>
-      </a>
-      <!-- Navbar Right Menu -->
-      <div class="navbar-custom-menu">
+    </a>
+    <!-- Navbar Right Menu -->
+    <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
-      
-          <!-- User Account: style can be found in dropdown.less -->
-          <li class="dropdown user user-menu">
+    
+        <!-- User Account: style can be found in dropdown.less -->
+        <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src="<?php  if(array_key_exists('user_pers_summary', $user['usermeta'])) echo $user_pers_summary['profile_pic']; else echo "assets/img/user2-160x160.jpg";?>" class="user-image" alt="User Image">
-              <span class="hidden-xs"><?php echo $user['name'];?></span>
+            <img src="assets/img/avatar.png" class="user-image" alt="User Image">
+            <span class="hidden-xs">Admin</span>
             </a>
             <ul class="dropdown-menu">
-              <!-- User image -->
-              <li class="user-header">
-                <img src="<?php  if(array_key_exists('user_pers_summary', $user['usermeta'])) echo $user_pers_summary['profile_pic']; else echo "assets/img/user2-160x160.jpg";?>" class="img-circle" alt="User Image">
-
-                <p>
-                  <?php echo $user['name'];?>
-                </p>
-              </li>
-              <!-- Menu Body -->
-              <!-- <li class="user-body">
-                <div class="row">
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Option 1</a>
-                  </div>
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Option 2</a>
-                  </div>
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Option </a>
-                  </div>
+            <!-- User image -->
+            <li class="user-header">
+                <img src="assets/img/avatar.png" class="img-circle" alt="User Image">
+            </li>
+            <!-- Menu Footer-->
+            <li class="user-footer">
+                <div align="center">
+                <a href="login.php" class="btn btn-default btn-flat">Sign out</a>
                 </div>
-                <!-- /.row -->
-              </li>
-              <!-- Menu Footer-->
-              <li class="user-footer">
-                <div class="pull-left">
-                  <a href="dashboard.php" class="btn btn-default btn-flat">Profile</a>
-                </div>
-                <div class="pull-right">
-                  <a href="login.php" class="btn btn-default btn-flat">Sign out</a>
-                </div>
-              </li>
+            </li>
             </ul>
-          </li>
-          <!-- Control Sidebar Toggle Button -->
-          <!-- <li>
+        </li>
+        <!-- Control Sidebar Toggle Button -->
+        <!-- <li>
             <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
-          </li> -->
+        </li> -->
         </ul>
-      </div>
+    </div>
 
     </nav>
-  </header>
-  <!-- Left side column. contains the logo and sidebar -->
-  <aside class="main-sidebar">
+    </header>
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
-      <!-- Sidebar user panel -->
-      <div class="user-panel">
+    <!-- Sidebar user panel -->
+    <div class="user-panel">
         <div class="pull-left image">
-          <img src="<?php  if(array_key_exists('user_pers_summary', $user['usermeta'])) echo $user_pers_summary['profile_pic']; else echo "assets/img/user2-160x160.jpg";?>" class="img-circle" alt="User Image">
+        <img src="assets/img/avatar.png" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
-          <p><?php echo $user['name'];?></p>
-          <a><i class="fa fa-circle text-success"></i> Online</a>
+        <p>Admin</p>
+        <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
         </div>
-        <br>
-        <br>
-      </div>
-      <!-- /.search form -->
-      <!-- sidebar menu: : style can be found in sidebar.less -->
-      <ul class="sidebar-menu" data-widget="tree">
+    </div>
+    <!-- /.search form -->
+    <!-- sidebar menu: : style can be found in sidebar.less -->
+    <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MAIN NAVIGATION</li>
-        <li class="active treeview menu-open">
-          <a href="#">
+        <li class="treeview">
+        <a href="#">
             <i class="fa fa-dashboard"></i> <span>Dashboard</span>
             <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
+            <i class="fa fa-angle-left pull-right"></i>
             </span>
-          </a>
-          <ul class="treeview-menu">
-            <li class="active"><a href="dashboard.php"><i class="fa fa-user-o"></i> Profile</a></li>
-            <li><a href="events.php"><i class="fa fa-files-o"></i> Events</a></li>
-            <li><a href="settings.php"><i class="fa fa-cogs"></i> Settings</a></li>
-            <li><a href="contactus.php"><i class="fa fa-envelope"></i> Contact us</a></li>
-          </ul>
-        </li>  
-         
-      </ul>
+        </a>
+        <ul class="treeview-menu">
+            <li><a href="admin.php" class="active"><i class="fa fa-user"></i> Admin View</a></li>
+        </ul>
+        </li>
+        <li class="active treeview menu-open">
+        <a href="#">
+            <i class="fa fa-server"></i> <span>Batches</span>
+            <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu">
+            <?php for($year_start = 1998; $year_start<=$year; $year_start++) { $year_end = $year_start + 2;?>
+            <li><a href="batch.php?batch=<?php echo $year_start."-".$year_end?>" ><i class="fa fa-calendar"></i>
+                <?php echo $year_start."-".$year_end;?></a>
+            </li>
+                        <?php } ?>
+        </ul>
+        </li>
+        <li class="treeview">
+        <a href="#">
+            <i class="fa fa-files-o"></i>
+            <span>Events</span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu">
+            <li><a href="pages/layout/top-nav.html"><i class="fa fa-circle-o"></i> View Events</a></li>
+            <li><a href="pages/layout/top-nav.html"><i class="fa fa-circle-o"></i> Set Events</a></li>
+        </ul>
+        </li>       
+        
+    </ul>
     </section>
     <!-- /.sidebar -->
-  </aside>
+    </aside>
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Dashboard
-        <small></small>
+        Alumni Detail
+        <small><p>Click the button to print the current page.</p></small>
+        <button onclick="myFunction()" class="btn btn-info">Print this page</button>
       </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Dashboard</li>
+        <li class="active">Alumni Detail</li>
       </ol>
     </section>
 
@@ -189,12 +188,12 @@ if(array_key_exists('user_pers_summary', $user['usermeta']))
     <section class="content">
 
 <div class="row">
-  <div class="col-md-3">
+  <div class="col-md-4">
 
     <!-- Profile Image -->
     <div class="box box-primary">
       <div class="box-body box-profile">
-        <img class="profile-user-img img-responsive img-circle" src="<?php  if(array_key_exists('user_pers_summary', $user['usermeta'])) echo $user_pers_summary['profile_pic']; else echo "assets/img/user2-160x160.jpg";?>" alt="User profile picture">
+        <img class="profile-user-img img-responsive img-circle" src="<?php  if(array_key_exists('user_pers_summary', $user['usermeta'])) echo $user_pers_summary['profile_pic']; else echo "assets/img/avatar.png";?>" alt="User profile picture">
 
         <h3 class="profile-username text-center"><?php echo $user['name'];?></h3>
 
@@ -215,10 +214,16 @@ if(array_key_exists('user_pers_summary', $user['usermeta']))
             <b>Batch</b> <a class="pull-right"><?php echo $user['batch']; ?></a>
           </li>
           <li class="list-group-item">
-            <b>Email</b> <a class="pull-right"><?php echo $user['email']; ?></a>
+            <b>Email (Personal)</b> <a class="pull-right"><?php echo $user['email']; ?></a>
           </li>
           <li class="list-group-item">
-            <b>Phone Number</b> <a class="pull-right"><?php echo $user['number']; ?></a>
+            <b>Email (Offcial)</b> <a class="pull-right"><?php  if(array_key_exists('user_prof_summary', $user['usermeta'])) echo $user_prof_summary['user_ofc_email']; else echo "";?></a>
+          </li>
+          <li class="list-group-item">
+            <b>Phone Number (Personal)</b> <a class="pull-right"><?php echo $user['number']; ?></a>
+          </li>
+          <li class="list-group-item">
+            <b>Phone Number (Official)</b> <a class="pull-right"><?php  if(array_key_exists('user_prof_summary', $user['usermeta'])) echo $user_prof_summary['user_ofc_no']; else echo "";?></a>
           </li>
         </ul>
       </div>
@@ -227,11 +232,11 @@ if(array_key_exists('user_pers_summary', $user['usermeta']))
     <!-- /.box -->
  
   </div>
-  <div class="col-md-9">
+  <div class="col-md-8">
      <!-- About Me Box -->
      <div class="box box-primary">
       <div class="box-header with-border">
-        <h3 class="box-title">About Me</h3>
+        <h3 class="box-title">About <?php echo $user['name'];?></h3>
       </div>
       <!-- /.box-header -->
       <div class="box-body">
@@ -277,6 +282,7 @@ if(array_key_exists('user_pers_summary', $user['usermeta']))
         <strong><i class="fa fa-file-text-o margin-r-5"></i> Personal Summary </strong>
 
         <p><?php  if(array_key_exists('user_pers_summary', $user['usermeta'])) echo $user_pers_summary['user_pers_notes']; else echo "";?></p>
+                    
       </div>
       <!-- /.box-body -->
     </div>
@@ -323,5 +329,10 @@ if(array_key_exists('user_pers_summary', $user['usermeta']))
 <script src="assets/js/pages/dashboard2.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="assets/js/demo.js"></script>
+<script>
+function myFunction() {
+  window.print();
+}
+</script>
 </body>
 </html>

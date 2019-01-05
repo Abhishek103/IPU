@@ -26,7 +26,9 @@ if(isset($_POST['orgSubmit']))
     'user_ofc_no' => $_POST['inputOfcPhn'],
     'user_ofc_email' => $_POST['inputOfcEmail'],
     'user_skills' => $_POST['inputSkills'],
-    'user_prof_notes' => $_POST['inputProfExperience']
+    'user_prof_notes' => $_POST['inputProfExperience'],
+    'user_major' => $_POST['inputMajor'],
+    'user_minor' => $_POST['inputMinor']
   );
   updateUsermeta($usermetaName='user_prof_summary', json_encode($user_prof_summary), $user_id);
 }
@@ -365,6 +367,18 @@ if(array_key_exists('user_pers_summary', $user['usermeta']))
         <!-- /.tab-pane -->
         <div class="active tab-pane" id="organisations">
           <form class="form-horizontal" action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="POST">
+            <div class="form-group">
+              <label for="inputMajor" class="col-sm-2 control-label">Specialistion (Major)</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="inputMajor" name="inputMajor" placeholder="Specialisation" value="<?php  if(array_key_exists('user_prof_summary', $user['usermeta'])) echo $user_prof_summary['user_major']; ?>">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputMinor" class="col-sm-2 control-label"> Specialistion (Minor)</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="inputMinor" name="inputMinor" placeholder="Specialisation" value="<?php  if(array_key_exists('user_prof_summary', $user['usermeta'])) echo $user_prof_summary['user_minor']; ?>">
+              </div>
+            </div>
             <div class="form-group">
               <label for="inputOrg" class="col-sm-2 control-label"> Organisation</label>
               <div class="col-sm-10">
