@@ -20,6 +20,9 @@ if(array_key_exists('user_prof_summary', $user['usermeta']))
 if(array_key_exists('user_pers_summary', $user['usermeta']))
 {
   $user_pers_summary = json_decode($user['usermeta']['user_pers_summary'], true);
+  $user_count = countusers();
+  $year =  date("Y");
+  $events = getEventDetails();
 }
 }
 ?>
@@ -50,7 +53,9 @@ if(array_key_exists('user_pers_summary', $user['usermeta']))
   <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
-
+    
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css">
   <!-- Google Font -->
   <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
@@ -177,64 +182,102 @@ if(array_key_exists('user_pers_summary', $user['usermeta']))
       </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Dashboard</li>
+        <li class="active">Event List</li>
       </ol>
     </section>
 
     <!-- Main content -->
     <section class="content">
         <!-- START ACCORDION & CAROUSEL-->
-      <h2 class="page-header">Events List</h2>
 
-<div class="row">
-  <!-- /.col -->
-  <div class="col-sm-12">
-    <div class="box box-solid">
-      <div class="box-header with-border">
-        <!-- <h3 class="box-title">Carousel</h3> -->
-      </div>
-      <!-- /.box-header -->
-      <div class="box-body">
-        <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-          <ol class="carousel-indicators">
-            <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-            <li data-target="#carousel-example-generic" data-slide-to="1" class=""></li>
-            <li data-target="#carousel-example-generic" data-slide-to="2" class=""></li>
-          </ol>
-          <div class="carousel-inner">
-            <div class="item active">
-              <img src="http://placehold.it/1200x400/39CCCC/ffffff&text=USMS" alt="First slide">
-              <div class="carousel-caption">
-                First Slide
+      <div class="row">
+        <!-- /.col -->
+        <div class="col-sm-12">
+          <div class="box box-solid">
+            <div class="box-header with-border">
+              <!-- <h3 class="box-title">Carousel</h3> -->
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                  <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                  <li data-target="#carousel-example-generic" data-slide-to="1" class=""></li>
+                  <li data-target="#carousel-example-generic" data-slide-to="2" class=""></li>
+                </ol>
+                <div class="carousel-inner">
+                  <div class="item active">
+                    <img src="http://placehold.it/1200x200/39CCCC/ffffff&text=USMS" alt="First slide">
+                    <div class="carousel-caption">
+                      First Slide
+                    </div>
+                  </div>
+                  <div class="item">
+                    <img src="http://placehold.it/1200x200/3c8dbc/ffffff&text=EVENTS" alt="Second slide">
+                    <div class="carousel-caption">
+                      Second Slide
+                    </div>
+                  </div>
+                  <div class="item">
+                    <img src="http://placehold.it/1200x200/f39c12/ffffff&text=ALUMNI+MEET" alt="Third slide">
+                    <div class="carousel-caption">
+                      Third Slide
+                    </div>
+                  </div>
+                </div>
+                <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+                  <span class="fa fa-angle-left"></span>
+                </a>
+                <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+                  <span class="fa fa-angle-right"></span>
+                </a>
               </div>
             </div>
-            <div class="item">
-              <img src="http://placehold.it/1200x400/3c8dbc/ffffff&text=EVENTS" alt="Second slide">
-              <div class="carousel-caption">
-                Second Slide
-              </div>
-            </div>
-            <div class="item">
-              <img src="http://placehold.it/1200x400/f39c12/ffffff&text=ALUMNI+MEET" alt="Third slide">
-              <div class="carousel-caption">
-                Third Slide
-              </div>
-            </div>
+            <!-- /.box-body -->
           </div>
-          <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
-            <span class="fa fa-angle-left"></span>
-          </a>
-          <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
-            <span class="fa fa-angle-right"></span>
-          </a>
+          <!-- /.box -->
         </div>
+        <!-- /.col -->
       </div>
-      <!-- /.box-body -->
-    </div>
-    <!-- /.box -->
-  </div>
-  <!-- /.col -->
-</div>
+      <div class="row">
+        <div class="col-xs-12">
+  
+          <!-- /.box -->
+
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">Events</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body table-responsive">
+              <form action="<?php echo $_SERVER['PHP_SELF']?>" method="post">
+                <table id="example" class="table table-striped table-bordered" style="width:100%">
+                  <thead>
+                      <tr>
+                          <th>Name</th>
+                          <th>Description</th>
+                          <th>Start of the event</th>
+                          <th>End of the event</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <?php foreach($events as $event){ ?>
+                      <tr>
+                        <td><?php echo $event['event_name'];?></td>
+                        <td><?php echo $event['event_description'];?></td>
+                        <td><?php echo $event['event_start'];?></td>
+                        <td><?php echo $event['event_end'];?></td>
+                  </tbody>
+                      <?php } ?>  
+                </table>  							
+              </form>  
+            </div>
+          <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
 <!-- /.row -->
 <!-- END ACCORDION & CAROUSEL-->
      
@@ -279,5 +322,28 @@ if(array_key_exists('user_pers_summary', $user['usermeta']))
 <script src="assets/js/pages/dashboard2.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="assets/js/demo.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#example').DataTable( {
+        dom: 'Bfrtip',
+        buttons: [
+            'pageLength', 'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        lengthMenu: [
+            [ 10, 25, 50, -1 ],
+            [ '10 rows', '25 rows', '50 rows', 'Show all' ]
+        ],
+    } );
+} );
+
+</script>
 </body>
 </html>

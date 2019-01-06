@@ -282,3 +282,64 @@ function getBatchDetails($batch_year)
         return -1;
     }
 }
+/**
+ * get all events
+ * @return array
+ */
+
+function getEventDetails()
+{
+    global $conn;
+    $events = array();
+    
+    $sql = "SELECT * from events ORDER BY event_end DESC";
+    if (($result = $conn->query($sql)) && (mysqli_num_rows($result) > 0)) {
+        while($row = $result->fetch_assoc())
+        {
+            $events[] = array(
+                'event_id' => $row['event_id'],
+                'event_name' => $row['event_name'],
+                'event_description' => $row['event_description'],
+                'event_start' => $row['event_start'],
+                'event_end' => $row['event_end']
+            ); 
+        }
+    }
+    return $events;
+}
+/**
+ * To insert the new event
+ * @param name
+ * @param description
+ * @param start
+ * @param end
+ * @return integer
+ * */
+function insertEvents($name, $description, $start, $end)
+{
+    global $conn;
+   
+    $stmt = $conn->prepare("INSERT INTO events (event_name, event_description, event_start, event_end) VALUES (?, ?, ?, ?)");
+    $stmt->bind_param("ssss", $name, $description, $start, $end);
+    $stmt->execute();
+    $stmt->close();
+    return 1;
+}
+/**
+ * To insert the new event
+ * @param name
+ * @param description
+ * @param start
+ * @param end
+ * @return integer
+ * */
+function deleteEvent($id)
+{
+    global $conn;
+    
+    $sql = "Delete from events WHERE event_id =".$id;
+    if ($result = $conn->query($sql)) {
+        return 1;
+    }
+    return -1;
+}

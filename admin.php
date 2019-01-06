@@ -149,8 +149,8 @@ $year =  date("Y");
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="pages/layout/top-nav.html"><i class="fa fa-circle-o"></i> View Events</a></li>
-            <li><a href="pages/layout/top-nav.html"><i class="fa fa-circle-o"></i> Set Events</a></li>
+            <li><a href="viewevents.php"><i class="fa fa-circle-o"></i> View Events</a></li>
+            <li><a href="createevents.php"><i class="fa fa-circle-o"></i> Set Events</a></li>
             <!-- <li><a href="pages/layout/boxed.html"><i class="fa fa-circle-o"></i> Boxed</a></li>
             <li><a href="pages/layout/fixed.html"><i class="fa fa-circle-o"></i> Fixed</a></li>
             <li><a href="pages/layout/collapsed-sidebar.html"><i class="fa fa-circle-o"></i> Collapsed Sidebar</a></li> -->

@@ -9,23 +9,20 @@ if(!isset($_SESSION["admin"]))
 {
   header('Location: login.php');
 }
+if(isset($_POST['deleteEvent']))
+{
+  deleteEvent($_POST['deleteEvent']);
+}
 $user_count = countusers();
 $year =  date("Y");
-$batch_year = $_REQUEST['batch'];
-$batch = getBatchDetails($batch_year);
-if($batch != -1)
-{ 
-  $batch = (json_decode($batch, true));
-}
-else{
-  $batch = array();
-} 
+$events = getEventDetails();
+
 ?>
 <html>
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>AdminLTE 2 | Batches</title>
+  <title>USMS| Events</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
@@ -135,7 +132,7 @@ else{
             <li><a href="admin.php" class="active"><i class="fa fa-user"></i> Admin View</a></li>
           </ul>
         </li>
-        <li class="active treeview menu-open">
+        <li class="treeview ">
           <a href="#">
             <i class="fa fa-server"></i> <span>Batches</span>
             <span class="pull-right-container">
@@ -150,7 +147,7 @@ else{
 						<?php } ?>
           </ul>
         </li>
-        <li class="treeview">
+        <li class="treeview active menu-open">
           <a href="#">
             <i class="fa fa-files-o"></i>
             <span>Events</span>
@@ -159,8 +156,8 @@ else{
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="pages/layout/top-nav.html"><i class="fa fa-circle-o"></i> View Events</a></li>
-            <li><a href="pages/layout/top-nav.html"><i class="fa fa-circle-o"></i> Set Events</a></li>
+            <li class="active"><a href="viewevents.php"><i class="fa fa-circle-o"></i> View Events</a></li>
+            <li><a href="createevents.php"><i class="fa fa-circle-o"></i> Set Events</a></li>
           </ul>
         </li>       
          
@@ -174,11 +171,11 @@ else{
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Batch Information
+        Events List
       </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Batch</li>
+        <li class="active">Events</li>
       </ol>
     </section>
 
@@ -186,52 +183,96 @@ else{
     <section class="content">
       <!-- Info boxes -->
       <div class="row">
+  <!-- /.col -->
+  <div class="col-sm-12">
+    <div class="box box-solid">
+      <div class="box-header with-border">
+        <!-- <h3 class="box-title">Carousel</h3> -->
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body">
+        <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+          <ol class="carousel-indicators">
+            <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+            <li data-target="#carousel-example-generic" data-slide-to="1" class=""></li>
+            <li data-target="#carousel-example-generic" data-slide-to="2" class=""></li>
+          </ol>
+          <div class="carousel-inner">
+            <div class="item active">
+              <img src="http://placehold.it/1200x200/39CCCC/ffffff&text=USMS" alt="First slide">
+              <div class="carousel-caption">
+                First Slide
+              </div>
+            </div>
+            <div class="item">
+              <img src="http://placehold.it/1200x200/3c8dbc/ffffff&text=EVENTS" alt="Second slide">
+              <div class="carousel-caption">
+                Second Slide
+              </div>
+            </div>
+            <div class="item">
+              <img src="http://placehold.it/1200x200/f39c12/ffffff&text=ALUMNI+MEET" alt="Third slide">
+              <div class="carousel-caption">
+                Third Slide
+              </div>
+            </div>
+          </div>
+          <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+            <span class="fa fa-angle-left"></span>
+          </a>
+          <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+            <span class="fa fa-angle-right"></span>
+          </a>
+        </div>
+      </div>
+      <!-- /.box-body -->
+    </div>
+    <!-- /.box -->
+  </div>
+  <!-- /.col -->
+</div>
       <div class="row">
         <div class="col-xs-12">
-          
+  
           <!-- /.box -->
 
           <div class="box">
             <div class="box-header">
-              <h3 class="box-title">Batch <?php echo $_REQUEST['batch'];?></h3>
+              <h3 class="box-title">Events</h3>
             </div>
             <!-- /.box-header -->
             <div class="box-body table-responsive">
-              <table id="example" class="table table-striped table-bordered" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Organisation</th>
-                        <th>Designation</th>
-                        <th>Phone (Offcial / Residence)</th>
-                        <th>Email (Offcial / Personal)</th>
-                        <th>Details</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach($batch as $alumnus){ ?>
-                    <tr>
-                        
-                        <td><?php echo $alumnus['name'];?></td>
-                        <td><?php  if(array_key_exists('user_prof_summary', $alumnus['user_meta'])) { $user_prof = json_decode($alumnus['user_meta']['user_prof_summary'], true); echo $user_prof['user_current_org']; }?></td>
-                        <td><?php  if(array_key_exists('user_prof_summary', $alumnus['user_meta'])) { $user_prof = json_decode($alumnus['user_meta']['user_prof_summary'], true); echo $user_prof['user_current_desg']; }?></td>
-                        <td><?php  if(array_key_exists('user_prof_summary', $alumnus['user_meta'])) { $user_prof = json_decode($alumnus['user_meta']['user_prof_summary'], true); echo $user_prof['user_ofc_no']; }  echo " / ". $alumnus['number'];?></td>
-                        <td><?php  if(array_key_exists('user_prof_summary', $alumnus['user_meta'])) { $user_prof = json_decode($alumnus['user_meta']['user_prof_summary'], true); echo $user_prof['user_ofc_email']; }  echo " / ". $alumnus['email'];?></td>
-                        <td align="center"><a href="alumnidetail.php?code=<?php echo $alumnus['user_id']?>" class="btn btn-info">Open</a></td>
-                    </tr>
-                    <?php }?>
-                </tbody>
-        
-              </table>  							
+              <form action="<?php echo $_SERVER['PHP_SELF']?>" method="post">
+                <table id="example" class="table table-striped table-bordered" style="width:100%">
+                  <thead>
+                      <tr>
+                          <th>Name</th>
+                          <th>Description</th>
+                          <th>Start of the event</th>
+                          <th>End of the event</th>
+                          <?php if(isset($_SESSION['admin'])) { echo "<th>Action</th>";}?>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <?php foreach($events as $event){ ?>
+                      <tr>
+                        <td><?php echo $event['event_name'];?></td>
+                        <td><?php echo $event['event_description'];?></td>
+                        <td><?php echo $event['event_start'];?></td>
+                        <td><?php echo $event['event_end'];?></td> 
+                      <?php if(isset($_SESSION['admin'])) {?><td><button type="submit" align="center" class="btn btn-danger" name="deleteEvent" value="<?php echo $event['event_id'];?>">Delete events</button></td><?php } ?>                       
+                      </tr>
+                      <?php }?>
+                  </tbody>
+          
+                </table>  							
+              </form>  
             </div>
           <!-- /.box-body -->
           </div>
           <!-- /.box -->
         </div>
         <!-- /.col -->
-      </div>
-       
-    
       </div>
     </section>
     <!-- /.content -->

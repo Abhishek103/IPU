@@ -159,8 +159,8 @@ else{
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="pages/layout/top-nav.html"><i class="fa fa-circle-o"></i> View Events</a></li>
-            <li><a href="pages/layout/top-nav.html"><i class="fa fa-circle-o"></i> Set Events</a></li>
+            <li><a href="viewevents.php"><i class="fa fa-circle-o"></i> View Events</a></li>
+            <li><a href="createevents.php"><i class="fa fa-circle-o"></i> Set Events</a></li>
           </ul>
         </li>       
          
