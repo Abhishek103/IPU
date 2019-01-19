@@ -133,7 +133,7 @@ $year =  date("Y");
           </a>
           <ul class="treeview-menu">
             <?php for($year_start = 1998; $year_start<=$year; $year_start++) { $year_end = $year_start + 2;?>
-              <li><a href="batch.php?batch=<?php echo $year_start." - ".$year_end?>" ><i class="fa fa-calendar"></i>
+              <li><a href="batch.php?batch=<?php echo $year_start."-".$year_end?>" ><i class="fa fa-calendar"></i>
                 <?php echo $year_start." - ".$year_end;?></a>
               </li>
 						<?php } ?>

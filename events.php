@@ -20,10 +20,10 @@ if(array_key_exists('user_prof_summary', $user['usermeta']))
 if(array_key_exists('user_pers_summary', $user['usermeta']))
 {
   $user_pers_summary = json_decode($user['usermeta']['user_pers_summary'], true);
+}
   $user_count = countusers();
   $year =  date("Y");
   $events = getEventDetails();
-}
 }
 ?>
 <html>
